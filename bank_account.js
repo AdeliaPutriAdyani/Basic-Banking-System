@@ -1,7 +1,4 @@
-const BankAccount = require('./banking_system');
-
 let saldo = 100000;
-const account = new BankAccount(saldo);
 
 function saldoAwal() {
   let saldoAwalMessage = "Saldo Awal = " + saldo;
