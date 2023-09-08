@@ -1,75 +1,74 @@
+let saldo = 100000;
+
 class BankAccount {
-    constructor(initialBalance) {
-        this.balance = initialBalance;
+    constructor(saldo) {
+        this.saldo = saldo;
+    }
+
+    saldoAwal() {
+        let saldoAwalMessage = "Saldo Awal = " + this.saldo;
+        alert(saldoAwalMessage);
+        console.log(saldoAwalMessage);
     }
 
     deposit(amount) {
-        setTimeout(() => {
-            if (amount > 0) {
-                this.balance += amount;
-                console.log(`Deposit of ${amount} successfully processed. New balance: ${this.balance}`);
-            } else {
-                console.log("Deposit amount must be greater than 0.");
-            }
-        }, 2000); // Menunda eksekusi selama 2 detik untuk mensimulasikan operasi yang asynchronous.
+        return new Promise((resolve, reject) => {
+            setTimeout(() => {
+                if (amount > 0) {
+                    this.saldo += amount;
+                    resolve(`Deposit dengan Rp${amount} Berhasil diperbarui. \nSaldo Anda : ${this.saldo}`)
+                } else {
+                    reject(new Error ('Deposit harus lebih besar dari 0'));
+                }
+            }, 2000);
+        });
     }
 
     withdraw(amount) {
-        setTimeout(() => {
-            if (amount > 0 && amount <= this.balance) {
-                this.balance -= amount;
-                console.log(`Withdrawal of ${amount} successfully processed. New balance: ${this.balance}`);
-            } else if (amount > this.balance) {
-                console.log("Insufficient balance for withdrawal.");
-            } else {
-                console.log("Withdrawal amount must be greater than 0.");
-            }
-        }, 2000); // Menunda eksekusi selama 2 detik untuk mensimulasikan operasi yang asynchronous.
+        return new Promise((resolve, reject) => {
+            setTimeout(() => {
+                if (amount > 0 && amount <= this.saldo) {
+                    this.saldo -= amount;
+                    resolve(`Penarikan sejumlah ${amount} berhasil. \nSaldo baru: ${this.saldo}`)
+                } else if (amount > this.saldo) {
+                    reject(new Error ('Saldo Anda tidak mencukupi untuk penarikan !'));
+                } else {
+                    reject(new Error ('Deposit harus lebih besar dari 0'));
+                }
+            }, 2000);
+        });
     }
 }
 
-let saldo = 100000;
 const account = new BankAccount(saldo);
-
-function saldoAwal() {
-    let saldoAwalMessage = "Saldo Awal = " + account.balance;
-    alert(saldoAwalMessage);
-    console.log(saldoAwalMessage);
-}
-
-function tambahSaldo() {
-    let jumlah = parseFloat(prompt("Masukkan jumlah: "));
-    let message = "Nominal yang ditambahkan = " + jumlah;
-    console.log(message);
-    if (jumlah > 0) {
-        account.deposit(jumlah);
-    } else {
-        let gagal_tambah = "Maaf, nominal harus lebih besar dari 0";
-        console.log(gagal_tambah);
-    }
-}
-
-function kurangiSaldo() {
-    let jumlah = parseFloat(prompt("Masukkan jumlah: "));
-    let message = "Nominal yang dikurangi = " + jumlah;
-    console.log(message);
-    if (jumlah > 0) {
-        account.withdraw(jumlah);
-    } else {
-        let gagal_kurangi = "Maaf, nominal harus lebih besar dari 0";
-        console.log(gagal_kurangi);
-    }
-}
-
-saldoAwal();
+account.saldoAwal();
 
 const aksi = prompt("Pilih aksi yang ingin dilakukan:\n1. Tambah Saldo\n2. Kurangi Saldo\nKetik 1/2");
+
 if (aksi === "1") {
-    tambahSaldo();
+    let amount = parseFloat(prompt("Masukkan jumlah deposit: "));
+    account.deposit(amount)
+        .then(resolve => {
+            alert(resolve);
+            console.log(resolve)
+        })
+        .catch(error => {
+            alert(error)
+            console.error(error.message);
+        });
 } else if (aksi === "2") {
-    kurangiSaldo();
+    let amount = parseFloat(prompt("Masukkan jumlah penarikan/withdraw: "));
+    account.withdraw(amount)
+        .then(resolve => {
+            alert(resolve);
+            console.log(resolve)
+        })
+        .catch(error => {
+            alert(error)
+            console.error(error.message);
+        });
 } else {
-    let salah = "Pilihan yang Anda pilih salah!";
-    console.log(salah);
-    alert(salah);
+    const error = new Error("Pilihan yang Anda pilih salah!");
+    console.error(error.message);
+    alert(error)
 }
