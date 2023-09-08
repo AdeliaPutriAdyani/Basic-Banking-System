@@ -43,10 +43,10 @@ class BankAccount {
 const account = new BankAccount(saldo);
 account.saldoAwal();
 
-const aksi = prompt("Pilih aksi yang ingin dilakukan:\n1. Tambah Saldo\n2. Kurangi Saldo\nKetik 1/2");
+const aksi = prompt("Pilih aksi yang ingin dilakukan:\n1. Tambah Saldo/Deposit\n2. Kurangi Saldo/Withdraw\nKetik 1/2");
 
 if (aksi === "1") {
-    let amount = parseFloat(prompt("Masukkan jumlah deposit: "));
+    let amount = parseFloat(prompt("Masukkan jumlah saldo/deposit: "));
     account.deposit(amount)
         .then(resolve => {
             alert(resolve);
